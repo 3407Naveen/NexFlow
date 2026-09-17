@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 const navigation = [
-  { name: 'Overview', href: '/', icon: LayoutDashboard },
+  { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Workflows', href: '/workflows', icon: GitBranch },
   { name: 'Agents', href: '/agents', icon: Bot },
   { name: 'Tasks', href: '/tasks', icon: ListChecks },
@@ -46,7 +46,7 @@ export function Sidebar() {
       <div className="flex flex-1 flex-col overflow-y-auto px-4 py-4">
         <nav className="flex-1 space-y-1">
           {navigation.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isActive = Boolean(pathname && (pathname === item.href || (item.href !== '/' && pathname.startsWith(`${item.href}/`))));
             return (
               <Link
                 key={item.name}
