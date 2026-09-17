@@ -1,211 +1,491 @@
-# NexFlow — AI-Powered Multi-Agent Business Process Automation
+# 🤖 Intelligent Multi-Agent Framework for Business Process Automation
 
-> **"Where AI Agents Run Your Business."**  
-> An autonomous business operating layer for startups and SMBs where specialized AI agents plan, execute, and verify complex operations, while humans approve high-risk checkpoints.
+An intelligent, modular, and scalable **multi-agent framework** designed to automate complex business processes through AI-powered planning, task delegation, execution, validation, and human oversight.
 
 ---
 
-## 🎯 Product Framing & Core Loop
+## 📌 Overview
 
+Traditional business process automation mainly depends on predefined rules and fixed workflows. These systems can struggle when processes involve changing requirements, unstructured data, exceptions, or decision-making.
+
+The **Intelligent Multi-Agent Framework** addresses this challenge by using multiple specialized AI agents that collaborate to complete business tasks.
+
+The framework follows:
+
+> **Request → Plan → Delegate → Execute → Validate → Complete**
+
+Instead of relying on a single AI agent, the system distributes responsibilities among specialized agents coordinated by an **Orchestrator Agent**.
+
+---
+
+## 🎯 Problem Statement
+
+Businesses depend on repetitive manual processes and disconnected software systems for activities such as document processing, approvals, customer requests, finance, HR, and reporting.
+
+Traditional automation solutions are often rigid and rule-based, making them less effective when workflows require dynamic decision-making, exception handling, or interaction with multiple systems.
+
+This project aims to develop an intelligent multi-agent framework capable of understanding business requests, breaking them into tasks, coordinating specialized AI agents, interacting with external tools, validating results, and involving humans when necessary.
+
+---
+
+## 💡 Key Features
+
+* 🧠 **AI-Powered Task Planning**
+* 🤝 **Multi-Agent Collaboration**
+* 🔄 **Dynamic Workflow Orchestration**
+* 📄 **Document & Data Processing**
+* ⚙️ **Business Rule Execution**
+* 🔌 **API & Tool Integration**
+* ✅ **Automated Validation**
+* 👤 **Human-in-the-Loop Approval**
+* 📊 **Workflow Monitoring**
+* 📝 **Audit Logging**
+* 🧩 **Modular & Scalable Architecture**
+
+---
+
+## 🏗️ System Architecture
+
+```text
+                    ┌──────────────────┐
+                    │  BUSINESS USER   │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │   USER INTERFACE │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │  ORCHESTRATOR    │
+                    │      AGENT       │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │  PLANNER AGENT   │
+                    └────────┬─────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              ▼              ▼              ▼
+       ┌────────────┐ ┌────────────┐ ┌────────────┐
+       │  Document  │ │  Business  │ │    Data    │
+       │   Agent    │ │ Rule Agent │ │   Agent    │
+       └──────┬─────┘ └──────┬─────┘ └──────┬─────┘
+              │              │              │
+              └──────────────┼──────────────┘
+                             ▼
+                    ┌──────────────────┐
+                    │ EXECUTION AGENT  │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ VALIDATION AGENT │
+                    └────────┬─────────┘
+                             │
+                       ┌─────┴─────┐
+                       ▼           ▼
+                  ┌────────┐  ┌────────────┐
+                  │Success │  │   Human    │
+                  │        │  │  Approval  │
+                  └───┬────┘  └──────┬─────┘
+                      │               │
+                      └───────┬───────┘
+                              ▼
+                    ┌──────────────────┐
+                    │ REPORTING & LOGS │
+                    └──────────────────┘
 ```
-User Prompt (Natural Language)
-          │
-          ▼
-┌─────────────────────────────────┐
-│       Orchestrator Graph        │
-│  • Intent Parser (structured)   │
-│  • Task Planner (DAG Generator) │
-└─────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────┐
-│     Specialized Domain Agents   │
-│  [Sales] [Finance] [HR]         │
-│  [Support] [Marketing]          │
-│   (12 Boundary-Validated Tools) │
-└─────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────┐
-│       Verification Agent        │
-│  (PASS / FAIL / NEEDS_REVIEW)   │
-└─────────────────────────────────┘
-          │
-          ├── [NEEDS_REVIEW / High Risk] ──► Human Approval Center (#E8A33D)
-          ▼                                            │ (Approve)
-┌─────────────────────────────────┐                    │
-│   Final Delivery & Audit Log    │◄───────────────────┘
-│   (Immutable PostgreSQL Record) │
-└─────────────────────────────────┘
+
+---
+
+## 🧩 Modules
+
+### 1. User Interface Module
+
+Provides an interface for users to submit business requests through:
+
+* Chat
+* Forms
+* File uploads
+* Workflow requests
+
+### 2. Orchestrator Module
+
+Acts as the central coordinator.
+
+It:
+
+* Understands the user request
+* Selects required agents
+* Assigns tasks
+* Tracks workflow progress
+* Coordinates agent communication
+
+### 3. Planner Module
+
+Breaks complex business requests into smaller executable tasks.
+
+Example:
+
+```text
+Process Invoice
+      ↓
+Extract Data
+      ↓
+Validate Invoice
+      ↓
+Check Business Rules
+      ↓
+Request Approval
+      ↓
+Process Payment
+      ↓
+Update Records
 ```
 
-### Positioning Test
-*Every screen and feature must answer:* **"Does this help the user trust and control a workflow that agents run for them?"** — *never "does this let the user chat with an agent?"*
+### 4. Specialized Agent Module
 
-### Explicit Non-Goals (v1 MVP)
-- **Not a chatbot**: No conversational fluff or simulated typing theater. Status is drawn via state, color, and live traces.
-- **Not a 200-shallow-integration tool**: Ships 12 deep, validated, permission-checked tools with exact interfaces.
-- **Not multi-model**: Standardized on GPT-4o / GPT-4o-mini with unified token/cost tracking.
+Different agents handle different responsibilities.
+
+| Agent               | Responsibility                     |
+| ------------------- | ---------------------------------- |
+| Document Agent      | Extract information from documents |
+| Data Agent          | Retrieve and process business data |
+| Business Rule Agent | Apply business policies            |
+| Execution Agent     | Perform actions using tools/APIs   |
+| Validation Agent    | Verify workflow results            |
+| Reporting Agent     | Generate reports and summaries     |
+
+### 5. Tool & API Module
+
+Connects agents with external business systems.
+
+Examples:
+
+* Gmail
+* CRM
+* ERP
+* Google Drive
+* Databases
+* Payment APIs
+* REST APIs
+* Webhooks
+
+### 6. Data Management Module
+
+Manages:
+
+* Business data
+* Agent memory
+* Workflow state
+* Documents
+* Execution history
+* Audit records
+
+### 7. Monitoring & Security Module
+
+Provides:
+
+* Authentication
+* Authorization
+* Agent monitoring
+* Error handling
+* Audit logs
+* Human approval
+* Workflow tracking
 
 ---
 
-## 🛠️ Tech Stack
+## 🔄 Workflow
 
-| Layer | Choice | Details |
-|---|---|---|
-| **Frontend** | Next.js 15 (App Router), TypeScript, Tailwind CSS v4 | Server Components for data tables, `@xyflow/react` for the workflow canvas, Lucide icons |
-| **Backend** | Python 3.12+, FastAPI | Pydantic v2 schemas, async lifespan, structured logging with correlation IDs |
-| **Agent / AI** | LangGraph, OpenAI API, Structured Outputs | Orchestrator DAG graph, isolated subgraphs per agent, dedicated Verification agent |
-| **Database** | PostgreSQL 16 + pgvector | Multi-tenant schema isolation, Row-Level Security (`SET LOCAL`), append-only audit log |
-| **Background Queue** | Redis 7 + Arq | All workflow executions run asynchronously off the main HTTP thread |
-| **Realtime** | Server-Sent Events (SSE) | Live streaming of workflow execution states to React Flow canvas |
-| **Storage** | MinIO (S3-compatible) | Presigned URLs for knowledge uploads |
+The framework follows a simple pipeline:
 
----
-
-## 🎨 Industrial Control-Room Design System
-
-Designed around the tension between **machine-run automation** and **human judgment**:
-
-| Token | Hex | Semantic Meaning |
-|---|---|---|
-| `--surface-base` | `#0E1016` | Near-black, blue-shifted deep background |
-| `--surface-raised` | `#171A22` | Cards, panels, elevated sections |
-| `--surface-overlay` | `#1F2330` | Modals, drawers, dropdowns |
-| `--accent-indigo` | `#5B6EF5` | Primary actions, running node pulses |
-| `--signal-amber` | `#E8A33D` | **RESERVED ONLY FOR "YOU":** Requires Human Approval / Needs Review |
-| `--signal-green` | `#3FBF7F` | Verified / Completed state |
-| `--signal-red` | `#E2555A` | Failed / Escalated state |
-| `--text-primary` | `#EDEEF2` | High-contrast readable typography |
-| `--text-muted` | `#8B90A0` | Secondary metadata and labels |
+```text
+User Request
+     ↓
+Understand Request
+     ↓
+Create Plan
+     ↓
+Select Agents
+     ↓
+Delegate Tasks
+     ↓
+Execute Actions
+     ↓
+Validate Results
+     ↓
+Human Approval (if required)
+     ↓
+Generate Report
+     ↓
+Complete Process
+```
 
 ---
 
-## 🚀 Quickstart
+## 💼 Example Use Case
 
-### Option A: Docker Compose (All-in-One)
+### Automated Invoice Processing
 
-Ensure Docker and Docker Compose are installed:
+A business user submits:
+
+> "Process all invoices above ₹50,000 and send them for manager approval."
+
+The system automatically performs:
+
+```text
+Invoice Received
+      ↓
+Document Agent
+      ↓
+Extract Invoice Details
+      ↓
+Business Rule Agent
+      ↓
+Check Amount > ₹50,000
+      ↓
+Execution Agent
+      ↓
+Send Approval Request
+      ↓
+Human Approval
+      ↓
+Validation Agent
+      ↓
+Update Database
+      ↓
+Generate Report
+```
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+
+* React
+* TypeScript
+* Tailwind CSS
+
+### Backend
+
+* Python
+* FastAPI
+
+### AI & Agents
+
+* Large Language Models (LLMs)
+* LangGraph / CrewAI
+* Retrieval-Augmented Generation (RAG)
+
+### Database
+
+* PostgreSQL
+* Supabase
+* pgvector
+
+### Additional Services
+
+* Redis
+* REST APIs
+* Webhooks
+
+### Deployment
+
+* Vercel
+* Render / Railway
+* AWS
+
+---
+
+## 📁 Suggested Project Structure
+
+```text
+multi-agent-business-automation/
+│
+├── frontend/
+│   ├── src/
+│   ├── components/
+│   ├── pages/
+│   └── services/
+│
+├── backend/
+│   ├── agents/
+│   │   ├── orchestrator.py
+│   │   ├── planner.py
+│   │   ├── document_agent.py
+│   │   ├── data_agent.py
+│   │   ├── business_agent.py
+│   │   ├── execution_agent.py
+│   │   └── validation_agent.py
+│   │
+│   ├── workflows/
+│   ├── tools/
+│   ├── api/
+│   ├── database/
+│   └── main.py
+│
+├── tests/
+│
+├── .env.example
+├── requirements.txt
+├── package.json
+└── README.md
+```
+
+---
+
+## 🚀 Installation
+
+### Clone Repository
 
 ```bash
-# 1. Clone repository
-cd d:/NexFlow
+git clone https://github.com/your-username/multi-agent-business-automation.git
 
-# 2. Configure environment
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env.local
-
-# 3. Start all services (PostgreSQL + pgvector, Redis, MinIO, API, Worker)
-docker compose up -d
-
-# 4. Visit the web app
-# Frontend: http://localhost:3000
-# Backend API Docs: http://localhost:8000/docs
-# MinIO Console: http://localhost:9001 (nexflow_access / nexflow_secret)
+cd multi-agent-business-automation
 ```
 
-### Option B: Local Development
+### Backend Setup
 
-#### 1. Backend (FastAPI + Python 3.12+)
 ```bash
 cd backend
-python -m venv .venv
-# On Windows:
-.venv\Scripts\activate
-# On Unix:
-source .venv/bin/activate
 
-pip install -e ".[dev]"
-uvicorn app.main:app --reload --port 8000
+python -m venv venv
 ```
 
-#### 2. Frontend (Next.js 15)
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Configure Environment Variables
+
+Create `.env`:
+
+```env
+LLM_API_KEY=your_api_key
+DATABASE_URL=your_database_url
+SUPABASE_URL=your_supabase_url
+SUPABASE_KEY=your_supabase_key
+```
+
+### Run Backend
+
+```bash
+uvicorn main:app --reload
+```
+
+### Frontend Setup
+
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
-Visit `http://localhost:3000` to interact with the full dashboard and landing page.
+---
+
+## 🔐 Security
+
+The framework should implement:
+
+* Role-based access control
+* API authentication
+* Secure environment variables
+* Agent permission management
+* Human approval for sensitive actions
+* Complete audit trails
+* Input and output validation
 
 ---
 
-## 🤖 Five Specialized Business Agents & 12 Demo Tools
+## 📊 Comparative Analysis
 
-| Agent | Responsibilities | Boundary-Validated Tools |
-|---|---|---|
-| **Sales & CRM** | Lead management, qualification, follow-ups | `search_crm_contacts`, `update_crm_deal`, `send_follow_up_email` |
-| **Finance** | Invoicing, payments, expense audits | `generate_invoice`, `check_payment_status`, `create_expense_report` |
-| **HR** | Employee queries, scheduling, onboarding | `search_employees`, `schedule_meeting` |
-| **Customer Support** | Ticket resolution, RAG knowledge search | `search_tickets`, `create_ticket`, `search_knowledge_base` |
-| **Marketing** | Campaign briefs, content drafting | `generate_content_brief` |
-
-*Security*: Any tool returning external text passes through `sanitize_tool_output` with clear delimiters to neutralize prompt-injection attacks.
-
----
-
-## 📂 Project Structure
-
-```
-NexFlow/
-├── docker-compose.yml              # Local multi-service infrastructure
-├── README.md                       # Comprehensive guide & architecture
-├── backend/
-│   ├── pyproject.toml              # Python 3.12+ project & dependencies
-│   ├── Dockerfile                  # Container definition
-│   ├── scripts/
-│   │   ├── init.sql                # Postgres extensions (uuid-ossp, pgvector)
-│   │   └── seed_demo_data.py       # Pre-seeded workflows & demo state
-│   ├── app/
-│   │   ├── main.py                 # FastAPI application factory & lifespan
-│   │   ├── core/                   # Config (pydantic-settings), DB, security, logging
-│   │   ├── models/                 # SQLAlchemy 2.0 async declarative models
-│   │   ├── schemas/                # Pydantic v2 schemas
-│   │   ├── api/                    # Routers for all 11 domains + SSE
-│   │   ├── agents/                 # LangGraph orchestrator, base agent, 5 specialists
-│   │   │   ├── tools/              # 12 demo tools, registry, prompt sanitizer
-│   │   │   └── verification_agent.py # Dedicated scoring LLM
-│   │   ├── services/               # Workflow execution, approvals, audit logs
-│   │   ├── middleware/             # Correlation ID & rate limiting
-│   │   └── workers/                # Arq background workers
-│   └── tests/                      # Unit & integration test suite
-└── frontend/
-    ├── package.json                # Next.js 15, @xyflow/react, Tailwind v4
-    ├── next.config.ts
-    ├── tsconfig.json
-    └── src/
-        ├── app/
-        │   ├── page.tsx            # Landing page with live workflow visual motif
-        │   └── (dashboard)/        # 10 dashboard routes (workflows, tasks, approvals, etc.)
-        ├── components/             # React Flow canvas, custom nodes, UI kit
-        ├── hooks/                  # useSSE real-time streaming hook
-        ├── lib/                    # API client & formatting utilities
-        ├── stores/                 # Zustand workflow canvas store
-        └── types/                  # Complete TypeScript definitions
-```
+| Feature             | Manual Process | Traditional Automation | Proposed Framework |
+| ------------------- | -------------- | ---------------------- | ------------------ |
+| Automation          | Low            | High                   | High               |
+| Decision Making     | Human          | Rule-based             | AI-assisted        |
+| Flexibility         | High           | Limited                | High               |
+| Agent Collaboration | ❌              | Limited                | ✅                  |
+| Exception Handling  | Human          | Limited                | AI + Human         |
+| API Integration     | Manual         | Yes                    | Intelligent        |
+| Scalability         | Low            | Medium                 | High               |
+| Monitoring          | Manual         | Basic                  | Automated          |
 
 ---
 
-## 🛡️ Enterprise Security & Governance
+## 🎯 Expected Benefits
 
-1. **Row-Level Security (RLS)**: Scoped via `SET LOCAL app.current_tenant_id` within transactional blocks to eliminate connection pooling cross-tenant leaks.
-2. **Append-Only Audit Log**: `audit_logs` table has UPDATE and DELETE operations disabled at the database privilege level.
-3. **Idempotency Keys**: Mutating actions derive deterministic `SHA256(workflow_run_id:task_id:attempt)` keys to prevent duplicate side-effects during retries.
-4. **Token Budgeting**: Per-organization monthly caps and per-run token ceilings enforced before each graph execution step.
-
----
-
-## 🧪 Testing
-
-Run backend tests:
-```bash
-python -m pytest backend/tests -v
-```
-Verifies tool execution, security sanitization, cost calculations, idempotency keys, and agent permissions.
+* Reduced repetitive manual work
+* Faster business process execution
+* Improved workflow consistency
+* Reduced human errors
+* Better coordination between business systems
+* Dynamic handling of complex tasks
+* Improved process visibility
+* Scalable automation architecture
 
 ---
 
-## 📜 License
-MIT License. Built for autonomous enterprise workflow automation.
-#   N e x F l o w  
- 
+## 🔮 Future Scope
+
+Future versions can include:
+
+* Autonomous agent creation
+* Industry-specific agents
+* Advanced workflow generation from natural language
+* Voice-based business automation
+* Predictive process optimization
+* Self-healing workflows
+* Advanced analytics
+* Multi-organization support
+* Enterprise-level security and compliance
+
+---
+
+## 📌 Conclusion
+
+The **Intelligent Multi-Agent Framework for Business Process Automation** provides a modular approach to automating complex business workflows.
+
+By combining **AI reasoning, task planning, specialized agents, API integration, validation, and human oversight**, the framework can move beyond traditional fixed automation toward more adaptive and intelligent business process execution.
+
+---
+
+## 👨‍💻 Project
+
+**Project:** Intelligent Multi-Agent Framework for Business Process Automation
+
+**Category:** Artificial Intelligence / Multi-Agent Systems / Business Process Automation
+
+**Status:** 🚧 Under Development
+
+---
+
+## ⭐ Contributing
+
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push the branch
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is intended for educational, research, and development purposes.
